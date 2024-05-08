@@ -1,0 +1,1 @@
+/home2/michael.mark/.config/nvim/init.lua
