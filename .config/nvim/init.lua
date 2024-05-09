@@ -22,6 +22,7 @@ Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.6' }
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'nvim-tree/nvim-web-devicons'
+Plug 'nvim-tree/nvim-tree.lua'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -71,6 +72,7 @@ lualine.setup {
         theme = 'auto',  
         component_separators = { left = '', right = ''},
         section_separators = { left = '', right = ''},
+        always_divide_middle = false
     },
     sections = {
         lualine_a = {'mode'},
@@ -84,6 +86,35 @@ lualine.setup {
         lualine_y = {'location', 'filesize', 'filetype'},
         lualine_z = {}
     },
+    tabline = {
+        lualine_a = {},
+        lualine_b = {{
+            'buffers',
+            max_length = vim.o.columns,
+            buffers_color = {
+                active = {fg = '#000000', bg = '#839496'},
+                inactive = {fg = '#839496', bg = '#000000'}
+            },
+            symbols = {
+                alternate_file = ''
+            }
+        }},
+        lualine_c = {},
+        lualine_X = {},
+        lualine_y = {},
+        lualine_z = {}
+    },
 }
 
 lualine.refresh()
+
+-- Nvim-tree config
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+-- vim.opt.termguicolors = true
+require("nvim-tree").setup()
+
+-- My binds
+vim.keymap.set('n', '<Tab>', ":bnext<CR>", {})
+vim.keymap.set('n', '<S-Tab>', ":bprev<CR>", {})
+
