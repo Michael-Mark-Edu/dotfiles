@@ -23,6 +23,8 @@ Plug 'lewis6991/gitsigns.nvim'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'nvim-tree/nvim-web-devicons'
 Plug 'nvim-tree/nvim-tree.lua'
+Plug 'github/copilot.vim'
+Plug 'numToStr/Comment.nvim'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -43,6 +45,7 @@ if executable('clangd')
     augroup end
 endif
 
+
 " Tabs and numbers
 filetype plugin indent on
 set tabstop=4
@@ -56,6 +59,7 @@ set number
 -- Single-line requires
 require('nvim-cmp')
 require('gitsigns').setup()
+require('Comment').setup()
 
 -- Telescope binds
 local builtin = require('telescope.builtin')
@@ -115,6 +119,37 @@ vim.g.loaded_netrwPlugin = 1
 require("nvim-tree").setup()
 
 -- My binds
+vim.g.mapleader = ' '
 vim.keymap.set('n', '<Tab>', ":bnext<CR>", {})
 vim.keymap.set('n', '<S-Tab>', ":bprev<CR>", {})
+vim.keymap.set('n', '<leader>q', ":q<CR>", {})
+vim.keymap.set('n', '<leader>w', ":w<CR>", {})
+vim.keymap.set('n', '<leader>x', ":x<CR>", {})
+vim.keymap.set('n', '<leader>qq', ":qa!<CR>", {})
+vim.keymap.set('n', '<leader>ww', ":wa!<CR>", {})
+vim.keymap.set('n', '<leader>xx', ":xa!<CR>", {})
+vim.keymap.set('n', '<leader>b', ":bd<CR>", {})
+vim.keymap.set('n', '<leader><S-Tab>', ":bd<CR>", {})
+vim.keymap.set('n', '<leader><Tab>', ":tabe<CR>:edit ", {})
+vim.keymap.set('n', '<leader>n', ":tabe<CR>", {})
+vim.keymap.set('n', '<leader>\\', ":wa!<CR>:source ~/sc/init.lua<CR>", {})  
+ 
+vim.cmd([[
+" Copilot config
+" Ideally I'd do this in lua but I couldn't get the copilot functions to work
+function! SuggestOneCharacter()
+    let suggestion = copilot#Accept("")
+    let bar = copilot#TextQueuedForInsertion()
+    return bar[0]
+endfunction
+
+function! SuggestOneWord()
+    let suggestion = copilot#Accept("")
+    let bar = copilot#TextQueuedForInsertion()
+    return split(bar, '[ .(]\zs')[0]
+endfunction
+
+imap <script><expr> <C-right> SuggestOneWord()
+imap <script><expr> <C-S-right> SuggestOneCharacter()
+]])
 
