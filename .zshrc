@@ -109,4 +109,7 @@ prompt_context() {
 export PATH="$HOME/bin:$PATH"
 . "$HOME/.cargo/env"
 
+# System-specific configuration that is not saved in the repository
+. "$HOME/.zshrc.local"
+
 clear
