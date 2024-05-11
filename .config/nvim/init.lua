@@ -56,7 +56,6 @@ set number
 -- Put lua commands out here
 
 -- Single-line requires
-require('nvim-cmp')
 require('gitsigns').setup()
 require('Comment').setup()
 require('lualine')
@@ -69,13 +68,14 @@ vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 
 -- Lsp config
-vim.lsp.start {
-    name = 'clangd',
-    cmd = { 'clangd', '--background-index' },
-    filetypes = { 'c', 'cpp', 'objc', 'objcpp' },
-    root_dir = vim.loop.cwd,
-    init_options = {
-        clangdFileStatus = true
+require('lspconfig').clangd.setup{}
+require('lspconfig').lua_ls.setup{
+    settings = {
+        Lua = {
+            diagnostics = {
+                globals = { 'vim' }
+            }
+        }
     }
 }
 
@@ -90,15 +90,15 @@ local lualine = require('lualine')
 
 lualine.setup {
     options = {
-        theme = 'auto',  
+        theme = 'auto',
         component_separators = { left = '', right = ''},
         section_separators = { left = '', right = ''},
         always_divide_middle = false
     },
     sections = {
         lualine_a = {'mode'},
-        lualine_b = {'branch', 'diff', 'filename', 'searchcount', 'selectioncount', {
-            'diagnostics', 
+        lualine_b = {'branch', 'filename', 'searchcount', 'selectioncount', 'diff', {
+            'diagnostics',
             sources = {'nvim_lsp'},
             always_visible = false
         }},
@@ -144,7 +144,6 @@ lualine.refresh()
 -- end
 
 local cmp = require('cmp')
-local luasnip = require('luasnip')
 cmp.setup({
     snippet = {
       -- REQUIRED - you must specify a snippet engine
@@ -229,19 +228,20 @@ vim.keymap.set('n', '<leader>b', ":bd<CR>", {})
 vim.keymap.set('n', '<leader><S-Tab>', ":bd<CR>", {})
 vim.keymap.set('n', '<leader><Tab>', ":tabe<CR>:edit ", {})
 vim.keymap.set('n', '<leader>n', ":tabe<CR>", {})
-vim.keymap.set('n', '<leader>\\', ":wa!<CR>:source ~/dotfiles/.config/nvim/init.lua<CR>", {})  
+vim.keymap.set('n', '<leader>\\', ":wa!<CR>:source ~/dotfiles/.config/nvim/init.lua<CR>", {})
+vim.keymap.set('n', '/<esc>', ":nohlsearch<CR>", {})
 
 vim.keymap.set('i', '<C-S-right>', function()
-    local suggestion = vim.fn['copilot#Accept']("")
+    vim.fn['copilot#Accept']("")
     local bar = vim.fn['copilot#TextQueuedForInsertion']()
     return bar:sub(1, 1)
 end, {expr = true, remap = false})
 
--- This function works most of the time but sometimes it will replace incorrectly
--- '<C-S-right>' becomes ',' for example
 vim.keymap.set('i', '<C-right>', function()
-    local suggestion = vim.fn['copilot#Accept']("")
+    vim.fn['copilot#Accept']("")
     local bar = vim.fn['copilot#TextQueuedForInsertion']()
-    return vim.fn.split(bar,  [[[ .)]\zs]])[1]
+    -- Dear Copilot: How do I make this line trigger split on (, ), <, and >?
+    --return vim.fn.split(bar,  [[\s\(\)\[\]<>]])[1]
+    return vim.fn.split(bar,  [[[ .\(\)\<\>]\zs]])[1]
 end, {expr = true, remap = false})
 

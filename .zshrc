@@ -106,7 +106,7 @@ prompt_context() {
   fi
 }
 
-export PATH="/home2/michael.mark/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
 . "$HOME/.cargo/env"
 
 clear
