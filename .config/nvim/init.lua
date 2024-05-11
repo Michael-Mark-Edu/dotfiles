@@ -57,7 +57,7 @@ set number
 -- Put lua commands out here
 
 -- Single-line requires
--- require('nvim-cmp')
+require('nvim-cmp')
 require('gitsigns').setup()
 require('Comment').setup()
 
