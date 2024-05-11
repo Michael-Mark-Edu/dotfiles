@@ -57,7 +57,7 @@ set number
 -- Put lua commands out here
 
 -- Single-line requires
-require('nvim-cmp')
+-- require('nvim-cmp')
 require('gitsigns').setup()
 require('Comment').setup()
 
@@ -125,31 +125,26 @@ vim.keymap.set('n', '<S-Tab>', ":bprev<CR>", {})
 vim.keymap.set('n', '<leader>q', ":q<CR>", {})
 vim.keymap.set('n', '<leader>w', ":w<CR>", {})
 vim.keymap.set('n', '<leader>x', ":x<CR>", {})
-vim.keymap.set('n', '<leader>qq', ":qa!<CR>", {})
-vim.keymap.set('n', '<leader>ww', ":wa!<CR>", {})
-vim.keymap.set('n', '<leader>xx', ":xa!<CR>", {})
+vim.keymap.set('n', '<leader>qq', ":qa<CR>", {})
+vim.keymap.set('n', '<leader>ww', ":wa<CR>", {})
+vim.keymap.set('n', '<leader>xx', ":xa<CR>", {})
 vim.keymap.set('n', '<leader>b', ":bd<CR>", {})
 vim.keymap.set('n', '<leader><S-Tab>', ":bd<CR>", {})
 vim.keymap.set('n', '<leader><Tab>', ":tabe<CR>:edit ", {})
 vim.keymap.set('n', '<leader>n', ":tabe<CR>", {})
-vim.keymap.set('n', '<leader>\\', ":wa!<CR>:source ~/sc/init.lua<CR>", {})  
- 
-vim.cmd([[
-" Copilot config
-" Ideally I'd do this in lua but I couldn't get the copilot functions to work
-function! SuggestOneCharacter()
-    let suggestion = copilot#Accept("")
-    let bar = copilot#TextQueuedForInsertion()
-    return bar[0]
-endfunction
+vim.keymap.set('n', '<leader>\\', ":wa!<CR>:source ~/dotfiles/.config/nvim/init.lua<CR>", {})  
 
-function! SuggestOneWord()
-    let suggestion = copilot#Accept("")
-    let bar = copilot#TextQueuedForInsertion()
-    return split(bar, '[ .(]\zs')[0]
-endfunction
+vim.keymap.set('i', '<C-S-right>', function()
+    local suggestion = vim.fn['copilot#Accept']("")
+    local bar = vim.fn['copilot#TextQueuedForInsertion']()
+    return bar:sub(1, 1)
+end, {expr = true, remap = false})
 
-imap <script><expr> <C-right> SuggestOneWord()
-imap <script><expr> <C-S-right> SuggestOneCharacter()
-]])
+-- This function works most of the time but sometimes it will replace incorrectly
+-- '<C-S-right>' becomes ',' for example
+vim.keymap.set('i', '<C-right>', function()
+    local suggestion = vim.fn['copilot#Accept']("")
+    local bar = vim.fn['copilot#TextQueuedForInsertion']()
+    return vim.fn.split(bar,  [[[ .)]\zs]])[1]
+end, {expr = true, remap = false})
 
