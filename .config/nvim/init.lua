@@ -68,6 +68,7 @@ vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 
 -- Lsp config
+vim.diagnostic.config { update_in_insert = true }
 require('lspconfig').clangd.setup{}
 require('lspconfig').lua_ls.setup{
     settings = {
