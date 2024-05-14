@@ -25,6 +25,9 @@ Plug 'nvim-tree/nvim-web-devicons'
 Plug 'nvim-tree/nvim-tree.lua'
 Plug 'github/copilot.vim'
 Plug 'numToStr/Comment.nvim'
+Plug 'mfussenegger/nvim-dap'
+Plug 'nvim-neotest/nvim-nio'
+Plug 'rcarriga/nvim-dap-ui'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
@@ -79,6 +82,31 @@ require('lspconfig').lua_ls.setup{
         }
     }
 }
+
+-- Dap config
+local dap = require("dap")
+dap.adapters.gdb = {
+  type = "executable",
+  command = "gdb",
+  args = { "-i", "dap" }
+}
+
+dap.configurations.cpp = {
+  {
+    name = "Launch",
+    type = "gdb",
+    request = "launch",
+    program = function()
+      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+    end,
+    cwd = '${workspaceFolder}',
+    stopOnEntry = false,
+    args = {},
+    runInTerminal = false
+  }
+}
+
+require("dapui").setup()
 
 -- Nvim-tree config
 vim.g.loaded_netrw = 1
@@ -186,6 +214,8 @@ vim.keymap.set('n', '<leader><Tab>', ":tabe<CR>:edit ", {})
 vim.keymap.set('n', '<leader>n', ":tabe<CR>", {})
 vim.keymap.set('n', '<leader>\\', ":wa!<CR>:source ~/dotfiles/.config/nvim/init.lua<CR>", {})
 vim.keymap.set('n', '/<esc>', ":nohlsearch<CR>", {})
+vim.keymap.set('n', '<leader>dd', ":lua require('dapui').toggle()<CR>", {})
+vim.keymap.set('n', '<leader>db', ":lua require('dap').toggle_breakpoint()<CR>", {})
 
 vim.keymap.set('i', '<C-S-right>', function()
     vim.fn['copilot#Accept']("")
