@@ -106,8 +106,6 @@ prompt_context() {
   fi
 }
 
-export PATH="$HOME/bin:$PATH"
-
 # System-specific configuration that is not saved in the repository
 . "$HOME/.zshrc_local"
 
