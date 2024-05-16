@@ -1,14 +1,9 @@
+-- Plug config
 vim.cmd([[
-" Put vimscript commands in here
-
-" Plugins will be downloaded under the specified directory.
 call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 
-" Declare the list of plugins.
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'prabirshrestha/async.vim'
-" Plug 'prabirshrestha/vim-lsp'
-" Plug 'mattn/vim-lsp-settings'
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
@@ -29,39 +24,19 @@ Plug 'mfussenegger/nvim-dap'
 Plug 'nvim-neotest/nvim-nio'
 Plug 'rcarriga/nvim-dap-ui'
 
-" List ends here. Plugins become visible to Vim after this call.
 call plug#end()
-
-" " This is needed for lsp to work with C(++)
-" if executable('clangd')
-"     augroup lsp_clangd
-"         autocmd!
-"         autocmd User lsp_setup call lsp#register_server({
-"                     \ 'name': 'clangd',
-"                     \ 'cmd': {server_info->['clangd']},
-"                     \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
-"                     \ })
-"         autocmd FileType c setlocal omnifunc=lsp#complete
-"         autocmd FileType cpp setlocal omnifunc=lsp#complete
-"         autocmd FileType objc setlocal omnifunc=lsp#complete
-"         autocmd FileType objcpp setlocal omnifunc=lsp#complete
-"     augroup end
-" endif
-
-" Tabs and numbers
-filetype plugin indent on
-set tabstop=4
-set shiftwidth=4
-set expandtab
-set number
 ]])
 
--- Put lua commands out here
+-- Basic config
+-- vim.cmd('filetype plugin indent on')
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+vim.opt.number = true
 
 -- Single-line requires
 require('gitsigns').setup()
 require('Comment').setup()
-require('lualine')
 
 -- Telescope binds
 local builtin = require('telescope.builtin')
