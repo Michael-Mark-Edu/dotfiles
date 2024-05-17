@@ -127,10 +127,6 @@ lualine.setup {
         lualine_b = {{
             'buffers',
             max_length = vim.o.columns,
-            buffers_color = {
-                active = {fg = '#000000', bg = '#839496'},
-                inactive = {fg = '#839496', bg = '#000000'}
-            },
             symbols = {
                 alternate_file = ''
             }
