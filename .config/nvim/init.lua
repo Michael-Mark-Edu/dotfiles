@@ -60,26 +60,38 @@ require('lspconfig').lua_ls.setup{
 
 -- Dap config
 local dap = require("dap")
-dap.adapters.gdb = {
-  type = "executable",
-  command = "gdb",
-  args = { "-i", "dap" }
+-- dap.adapters.gdb = {
+--   type = "executable",
+--   command = "gdb",
+--   args = { "-i", "dap" }
+-- }
+
+dap.adapters.codelldb = {
+  type = 'server',
+  port = "${port}",
+  executable = {
+    -- CHANGE THIS to your path!
+    command = '/home/michael/downloads/codelldb-x86_64-linux.vsix_FILES/extension/adapter/codelldb',
+    args = {"--port", "${port}"},
+  }
 }
 
 dap.configurations.cpp = {
   {
-    name = "Launch",
-    type = "gdb",
+    name = "Launch file",
+    type = "codelldb",
     request = "launch",
     program = function()
       return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
     end,
     cwd = '${workspaceFolder}',
     stopOnEntry = false,
-    args = {},
-    runInTerminal = false
+    -- args = {},
+    -- runInTerminal = false
   }
 }
+
+dap.configurations.c = dap.configurations.cpp
 
 require("dapui").setup()
 
@@ -93,7 +105,7 @@ local lualine = require('lualine')
 
 lualine.setup {
     options = {
-        theme = 'auto',
+        theme = 'solarized_dark',
         component_separators = { left = '', right = ''},
         section_separators = { left = '', right = ''},
         always_divide_middle = false
@@ -187,7 +199,7 @@ vim.keymap.set('n', '<leader>b', ":bd<CR>", {})
 vim.keymap.set('n', '<leader><S-Tab>', ":bd<CR>", {})
 vim.keymap.set('n', '<leader><Tab>', ":tabe<CR>:edit ", {})
 vim.keymap.set('n', '<leader>n', ":tabe<CR>", {})
-vim.keymap.set('n', '<leader>\\', ":wa!<CR>:source ~/dotfiles/.config/nvim/init.lua<CR>", {})
+vim.keymap.set('n', '<leader>\\', ":wa!<CR>:source ~/.config/nvim/init.lua<CR>", {})
 vim.keymap.set('n', '/<esc>', ":nohlsearch<CR>", {})
 vim.keymap.set('n', '<leader>dd', ":lua require('dapui').toggle()<CR>", {})
 vim.keymap.set('n', '<leader>db', ":lua require('dap').toggle_breakpoint()<CR>", {})
@@ -201,6 +213,6 @@ end, {expr = true, remap = false})
 vim.keymap.set('i', '<C-right>', function()
     vim.fn['copilot#Accept']("")
     local bar = vim.fn['copilot#TextQueuedForInsertion']()
-    return vim.fn.split(bar,  [[[ .\(\)\<\>]\zs]])[1]
+    return vim.fn.split(bar,  [[[ .\(\)\<\>\n\:]\zs]])[1]
 end, {expr = true, remap = false})
 
