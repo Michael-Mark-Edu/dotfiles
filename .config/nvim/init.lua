@@ -38,12 +38,7 @@ vim.opt.number = true
 require('gitsigns').setup()
 require('Comment').setup()
 
--- Telescope binds
-local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
-vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
-vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
-vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+require('telescope.builtin')
 
 -- Lsp config
 vim.diagnostic.config { update_in_insert = true }
@@ -194,11 +189,15 @@ vim.keymap.set('n', '<leader>ax', ":xa<CR>", {})
 vim.keymap.set('n', '<leader>b', ":bd<CR>", {})
 vim.keymap.set('n', '<leader><S-Tab>', ":bd<CR>", {})
 vim.keymap.set('n', '<leader><Tab>', ":tabe<CR>:edit ", {})
-vim.keymap.set('n', '<leader>n', ":tabe<CR>", {})
 vim.keymap.set('n', '<leader>\\', ":wa!<CR>:source ~/.config/nvim/init.lua<CR>", {})
 vim.keymap.set('n', '/<esc>', ":nohlsearch<CR>", {})
 vim.keymap.set('n', '<leader>dd', ":lua require('dapui').toggle()<CR>", {})
 vim.keymap.set('n', '<leader>db', ":lua require('dap').toggle_breakpoint()<CR>", {})
+vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, {})
+vim.keymap.set('n', '<leader>fg', require('telescope.builtin').live_grep, {})
+vim.keymap.set('n', '<leader>fb', require('telescope.builtin').buffers, {})
+vim.keymap.set('n', '<leader>fh', require('telescope.builtin').help_tags, {})
+vim.keymap.set('n', '<leader>n', ":NvimTreeToggle<CR>", {})
 
 vim.keymap.set('i', '<C-S-right>', function()
     vim.fn['copilot#Accept']("")
