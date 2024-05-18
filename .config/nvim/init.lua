@@ -65,7 +65,6 @@ dap.adapters.codelldb = {
   type = 'server',
   port = "${port}",
   executable = {
-    -- CHANGE THIS to your path!
     command = '/home/michael/downloads/codelldb-x86_64-linux.vsix_FILES/extension/adapter/codelldb',
     args = {"--port", "${port}"},
   }
@@ -81,7 +80,9 @@ dap.configurations.cpp = {
     end,
     cwd = '${workspaceFolder}',
     stopOnEntry = false,
-    -- args = {},
+    args = {function()
+        return vim.fn.input('Arguments: ', '', 'file')
+    end},
     -- runInTerminal = false
   }
 }
