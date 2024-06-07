@@ -1,0 +1,5 @@
+xterm*background: black
+xterm*foreground: white
+xterm*faceName: JetBrainsMonoNerdFont:pixelsize=12
+xterm*selectToClipboard: true
+xterm.*backarrowKey: false

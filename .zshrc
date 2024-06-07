@@ -1,3 +1,5 @@
+# Don't use this .zshrc if you're using oh-my-posh
+
 # oh-my-zsh (somewhat) default configs
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="agnoster"
