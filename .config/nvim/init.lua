@@ -321,7 +321,6 @@ require("lazy").setup({
             local cmp = require("cmp")
             local luasnip = require("luasnip")
             luasnip.config.setup({})
-
             cmp.setup({
                 snippet = {
                     expand = function(args)
@@ -373,10 +372,13 @@ require("lazy").setup({
                             luasnip.expand_or_jump()
                         end
                     end, { "i", "s" }),
+
+                    -- For some reason on one of my systems this section causes backspace too
+                    -- not work in insert mode
                     -- ["<C-h>"] = cmp.mapping(function()
-                    --     if luasnip.locally_jumpable(-1) then
-                    --         luasnip.jump(-1)
-                    --     end
+                    -- 	if luasnip.locally_jumpable(-1) then
+                                -- 		luasnip.jump(-1)
+                    -- 	end
                     -- end, { "i", "s" }),
                 }),
                 sources = {
@@ -494,10 +496,7 @@ require("lazy").setup({
                 -- Disable "format_on_save lsp_fallback" for languages that don't
                 -- have a well standardized coding style. You can add additional
                 -- languages here or re-enable it for the disabled ones.
-                local disable_filetypes = {
-                    erl = true,
-                    erlang = true,
-                }
+                local disable_filetypes = { erl = true, erlang = true }
                 return {
                     timeout_ms = 500,
                     lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
