@@ -377,7 +377,7 @@ require("lazy").setup({
                     -- not work in insert mode
                     -- ["<C-h>"] = cmp.mapping(function()
                     -- 	if luasnip.locally_jumpable(-1) then
-                                -- 		luasnip.jump(-1)
+                    -- 		luasnip.jump(-1)
                     -- 	end
                     -- end, { "i", "s" }),
                 }),
