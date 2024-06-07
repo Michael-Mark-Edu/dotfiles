@@ -181,6 +181,15 @@ require("lazy").setup({
             "WhoIsSethDaniel/mason-tool-installer.nvim",
             { "j-hui/fidget.nvim", opts = {} },
             { "folke/neodev.nvim", opts = {} },
+            {
+                "ray-x/lsp_signature.nvim",
+                event = "VeryLazy",
+                opts = {},
+                config = function(_, opts)
+                    require("lsp_signature").setup(opts)
+                    require("lsp_signature").on_attach()
+                end,
+            },
         },
         config = function()
             vim.api.nvim_create_autocmd("LspAttach", {
