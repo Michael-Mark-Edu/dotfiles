@@ -1,2 +1,3 @@
 xrandr --output Virtual-1 --mode 1920x1200
 xrdb -merge ~/.Xdefaults
+xinput set-prop $(xinput | awk '$5 == "Touchpad" {print substr($6, 4)}') 346 1

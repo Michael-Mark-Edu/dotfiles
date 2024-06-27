@@ -140,7 +140,8 @@ require("lazy").setup({
             local builtin = require("telescope.builtin")
             vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
             vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
-            vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
+            vim.keymap.set("n", "<leader>sf", builtin.git_files, { desc = "[S]earch Git [F]iles" })
+            vim.keymap.set("n", "<leader>SF", builtin.find_files, { desc = "[S]earch [F]iles" })
             vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
             vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
             vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
@@ -181,15 +182,15 @@ require("lazy").setup({
             "WhoIsSethDaniel/mason-tool-installer.nvim",
             { "j-hui/fidget.nvim", opts = {} },
             { "folke/neodev.nvim", opts = {} },
-            {
-                "ray-x/lsp_signature.nvim",
-                event = "VeryLazy",
-                opts = {},
-                config = function(_, opts)
-                    require("lsp_signature").setup(opts)
-                    require("lsp_signature").on_attach()
-                end,
-            },
+            -- {
+            --     "ray-x/lsp_signature.nvim",
+            --     event = "VeryLazy",
+            --     opts = {},
+            --     config = function(_, opts)
+            --         require("lsp_signature").setup(opts)
+            --         require("lsp_signature").on_attach()
+            --     end,
+            -- },
         },
         config = function()
             vim.api.nvim_create_autocmd("LspAttach", {
@@ -203,11 +204,7 @@ require("lazy").setup({
                     map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
                     map("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
                     map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
-                    map(
-                        "<leader>ws",
-                        require("telescope.builtin").lsp_dynamic_workspace_symbols,
-                        "[W]orkspace [S]ymbols"
-                    )
+                    map("<leader>s", require("telescope.builtin").lsp_dynamic_workspace_symbols, "Workspace [S]ymbols")
                     map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
                     map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
                     map("K", vim.lsp.buf.hover, "Hover Documentation")
@@ -521,5 +518,81 @@ require("lazy").setup({
                 -- javascript = { { "prettierd", "prettier" } },
             },
         },
+    },
+    {
+        "mfussenegger/nvim-dap",
+        config = function()
+            local dap = require("dap")
+            dap.adapters.codelldb = {
+                type = "server",
+                port = "${port}",
+                executable = {
+                    command = "/home/michael/.local/share/nvim/mason/bin/codelldb",
+                    args = { "--port", "${port}" },
+                },
+            }
+            dap.adapters.gdb = {
+                type = "executable",
+                command = "gdb",
+                args = { "-i", "dap" },
+            }
+            dap.configurations.cpp = {
+                {
+                    name = "Launch",
+                    type = "gdb",
+                    request = "launch",
+                    program = function()
+                        return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+                    end,
+                    cwd = "${workspaceFolder}",
+                    stopAtBeginningOfMainSubprogram = false,
+                },
+            }
+            dap.configurations.c = dap.configurations.cpp
+            -- dap.configurations.cpp = {
+            --     {
+            --         name = "Launch file",
+            --         type = "codelldb",
+            --         request = "launch",
+            --         program = function()
+            --             return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+            --         end,
+            --         cwd = "${workspaceFolder}",
+            --         stopOnEntry = false,
+            --     },
+            -- }
+        end,
+        keys = {
+            {
+                "<leader>db",
+                function()
+                    require("dap").toggle_breakpoint()
+                end,
+                mode = "n",
+                desc = "[D]ebugger [B]reakpoint",
+            },
+            {
+                "<leader>dc",
+                function()
+                    require("dap").continue()
+                end,
+                mode = "n",
+                desc = "[D]ebugger [C]ontinue",
+            },
+            {
+                "<leader>dr",
+                function()
+                    require("dap").repl.open()
+                end,
+                mode = "n",
+                desc = "[D]ebugger [R]epl",
+            },
+        },
+    },
+    {
+        "theHamsta/nvim-dap-virtual-text",
+        config = function()
+            require("nvim-dap-virtual-text").setup()
+        end,
     },
 })

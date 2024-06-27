@@ -1,15 +1,11 @@
-# Don't use this .zshrc if you're using oh-my-posh
+eval "$(oh-my-posh init zsh --config ~/.themes/p10k.toml)"
+alias ls="ls --color=auto"
 
-# oh-my-zsh (somewhat) default configs
-export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="agnoster"
-zstyle ':omz:update' mode reminder
-plugins=(git)
-source $ZSH/oh-my-zsh.sh
-prompt_context() {} # This gets rid of username next to command entry
+GPG_TTY=$(tty)
+export GPG_TTY
 
-# System-specific configuration that is not saved in the repository
-. "$HOME/.zshrc_local"
+if [[ $XDG_SESSION_TYPE == x11 ]] then
+    xinput set-prop $(xinput | awk '$5 == "Touchpad" {print substr($6, 4)}') 346 1
+fi
 
-source ~/.zsh/catppuccin_mocha-zsh-syntax-highlighting.zsh
-source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
