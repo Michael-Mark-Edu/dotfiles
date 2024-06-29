@@ -13,8 +13,8 @@ console_title_template = '{{ .Shell }} in {{ .Folder }}'
     type = 'path'
     style = 'plain'
     background = 'transparent'
-    foreground = 'p:fullpath'
-    template = '{{ if ne .Path "~" }}<p:fullpath>{{ else }}<p:path>{{ end }}{{ .Path }}</>'
+    foreground = 'transparent'
+    template = '{{ if and (ne .Path "~") (ne .Path "/") }}<p:fullpath>{{ else }}<p:path>{{ end }}{{ .Path }}</>'
 
     [blocks.segments.properties]
       style = 'full'
@@ -70,9 +70,9 @@ console_title_template = '{{ .Shell }} in {{ .Folder }}'
   template = '❯ '
 
 [secondary_prompt]
-  foreground = 'p:good'
+  foreground = 'p:secondary'
   background = 'transparent'
-  template = '└ '
+  template = '❯ '
 
 [palette]
   good = "#00ff00"
@@ -81,3 +81,4 @@ console_title_template = '{{ .Shell }} in {{ .Folder }}'
   git = "#999999"
   path = "#00ffff"
   fullpath = "#009090"
+  secondary = "#008000"
